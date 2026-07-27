@@ -55,18 +55,19 @@
     };
   };
 
-  nix.gc = {
-    automatic = true;
-    dates = "daily";
-    options = "--delete-older-than 7d";
-  };
-
+  # Auto-upgrade — uses flake.lock from GitHub (updated daily by CI)
   system.autoUpgrade = {
     enable = true;
     allowReboot = true;
     dates = "*-*-* 04:00:00";
     randomizedDelaySec = "1h";
-    flake = "/home/girodav/nixos-config";
+    flake = "github:girodav/nixos-config";
+  };
+
+  nix.gc = {
+    automatic = true;
+    dates = "daily";
+    options = "--delete-older-than 7d";
   };
 
   # Users ------------------------------------------------------------------
