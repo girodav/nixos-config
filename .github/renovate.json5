@@ -9,15 +9,11 @@
   "lockFileMaintenance": {
     "enabled": true,
     "automerge": true,
-    "platformAutomerge": true
+    "platformAutomerge": true,
+    "commitMessageAction": "nix flake update",
+    "commitMessageTopic": null,
+    "commitMessageExtra": null
   },
-  "schedule": ["at any time"],
-  "packageRules": [
-    {
-      "matchManagers": ["nix"],
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true
-    }
-  ]
+  "semanticCommitScope": "",
+  "schedule": ["at any time"]
 }
