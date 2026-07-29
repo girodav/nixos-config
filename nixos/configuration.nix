@@ -19,24 +19,7 @@
 
   # Locale -----------------------------------------------------------------
   time.timeZone = "Europe/Dublin";
-
   i18n.defaultLocale = "en_IE.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS        = "en_IE.UTF-8";
-    LC_IDENTIFICATION = "en_IE.UTF-8";
-    LC_MEASUREMENT    = "en_IE.UTF-8";
-    LC_MONETARY       = "en_IE.UTF-8";
-    LC_NAME           = "en_IE.UTF-8";
-    LC_NUMERIC        = "en_IE.UTF-8";
-    LC_PAPER          = "en_IE.UTF-8";
-    LC_TELEPHONE      = "en_IE.UTF-8";
-    LC_TIME           = "en_IE.UTF-8";
-  };
-
-  services.xserver.xkb = {
-    layout  = "us";
-    variant = "";
-  };
 
   # SSH --------------------------------------------------------------------
   services.openssh = {
@@ -78,7 +61,6 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEFUXy3ekhkpYc5Uum2Q46GdQcMz/NryC0UZ3u6YirZA girodav@Davides-MBP-2.fritz.box"
     ];
-    packages = with pkgs; [];
   };
 
   # Packages ---------------------------------------------------------------
