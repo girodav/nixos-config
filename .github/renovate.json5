@@ -6,6 +6,7 @@
   "nix": {
     "enabled": true
   },
+  "schedule": ["at any time"],
   "packageRules": [
     {
       "matchManagers": ["nix"],
