@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Check flake
+        run: nix flake check
+        env:
+          NIX_CONFIG: experimental-features = nix-command flakes
+
+      - name: Dry-build
+        run: nix build ".#nixosConfigurations.edoras.config.system.build.toplevel" --dry-run
+        env:
+          NIX_CONFIG: experimental-features = nix-command flakes
