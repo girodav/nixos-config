@@ -1,5 +1,9 @@
 { ... }:
 
+let
+  ntfyTopic = "alerts";
+  ntfyUrl   = "http://localhost:2586";
+in
 {
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.forceImportRoot = false;
@@ -8,4 +12,12 @@
 
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;    # for the NVMe fast pool
+
+  services.zfs.zed.settings = {
+    ZED_ENABLE_SYSLOG        = true;
+    ZED_NOTIFY_INTERVAL_SECS = 3600;
+    ZED_NOTIFY_VERBOSE       = 0;
+    ZED_NTFY_TOPIC           = ntfyTopic;
+    ZED_NTFY_URL             = ntfyUrl;
+  };
 }
