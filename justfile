@@ -1,5 +1,5 @@
 
-# Override with: just host=rivendell target=girodav@rivendell <recipe>
+# Override host: just host=rivendell <recipe>
 host   := "edoras"
 target := "girodav@" + host
 
@@ -33,9 +33,6 @@ check:
 update:
     nix flake update
 
-# Update inputs and switch
-upgrade: update switch
-
 # Delete old generations
 gc:
     nix-collect-garbage -d
@@ -43,6 +40,3 @@ gc:
 # Optimise nix store
 optimise:
     nix store optimise
-
-# gc + optimise
-clean: gc optimise
