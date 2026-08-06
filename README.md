@@ -46,6 +46,7 @@ justfile                         # Common tasks (deploy, install, update, gc, �
 nixos/
   modules/
     common.nix                   # Shared: boot, locale, SSH, Nix, users, packages
+    monitoring.nix               # Shared: node_exporter (all hosts)
   hosts/
     edoras/
       configuration.nix
@@ -61,9 +62,32 @@ nixos/
       disko.nix                  # 512 MB EFI + 8 GB swap + ext4 root (root NVMe only)
       modules/
         networking.nix
-        zfs.nix                  # ZFS pool imports (fast, tank) + scrub
+        zfs.nix                  # ZFS pool imports (fast, tank) + scrub + ZED ntfy alerts
         containers.nix           # Media stack as oci-containers
+        beszel.nix               # Beszel hub + SMART monitoring
 ```
+
+## Monitoring
+
+[Beszel](https://beszel.dev) — hub on rivendell (port 8090), lightweight agent on every host.
+
+Covers system metrics (CPU, memory, disk, network), Docker container stats, and SMART disk health.
+
+### Agent bootstrap
+
+On first deploy the agent `KEY` is empty, so no hub can connect yet. After deploying:
+
+1. Open `http://rivendell:8090` and complete hub setup
+2. **Settings → Server → Copy Public Key**
+3. Paste the key into `nixos/modules/monitoring.nix`:
+   ```nix
+   environment.KEY = "ssh-ed25519 AAAA...";
+   ```
+4. Redeploy all hosts: `just switch && just host=rivendell switch`
+
+### ZFS alerting
+
+ZFS pool/scrub events are sent to ntfy topic **`rivendell_alerts`** via ZED (configured in `zfs.nix`). Configure ntfy alerts for SMART and system metrics in the Beszel hub UI.
 
 ## Automation
 

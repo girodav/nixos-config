@@ -8,6 +8,7 @@
     ./modules/networking.nix
     ./modules/zfs.nix
     ./modules/containers.nix
+    ./modules/beszel.nix
   ];
 
   # Required for ZFS — must be unique per machine

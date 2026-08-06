@@ -39,6 +39,19 @@ in
         volumes = [ "/var/run/docker.sock:/var/run/docker.sock:ro" ];
       };
 
+      ntfy = {
+        image = "binwiederhier/ntfy:v2.11.0@sha256:38ef0bd584de2a11414c9b7330c03e5a542a312fd5078e09fc4a99e4cdd43352";
+        cmd = [ "serve" ];
+        ports = [ "2586:80" ];
+        volumes = [ "${appdata}/ntfy/cache:/var/cache/ntfy" ];
+        environment = {
+          TZ = tz;
+          NTFY_BASE_URL = "http://rivendell:2586";
+          NTFY_CACHE_FILE = "/var/cache/ntfy/cache.db";
+          NTFY_CACHE_DURATION = "12h";
+        };
+      };
+
       jellyfin = {
         image = "ghcr.io/jellyfin/jellyfin:10.11@sha256:45f648c382a0c8b552582fcea40e95cb17c5d475473a891cba0eb7523fb92112";
         user = user;
@@ -164,6 +177,6 @@ in
   };
 
   # Ports exposed by containers
-  networking.firewall.allowedTCPPorts = [ 8888 8096 8920 5055 6868 9696 7878 8989 7476 8080 ];
+  networking.firewall.allowedTCPPorts = [ 8888 8096 8920 5055 6868 9696 7878 8989 7476 8080 2586 ];
   networking.firewall.allowedUDPPorts = [ 1900 7359 ];
 }
