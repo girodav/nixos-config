@@ -1,8 +1,11 @@
-host := "edoras"
-target := "girodav@edoras"
+
+# Override with: just host=rivendell target=girodav@rivendell <recipe>
+host   := "edoras"
+target := "girodav@" + host
+
 remote_flags := "--target-host " + target + " --build-host " + target + " --elevate=sudo --ask-elevate-password"
 
-# Install NixOS on a live ISO target via nixos-anywhere (WIPES DISK)
+# Install NixOS on a live ISO target via nixos-anywhere (WIPES root disk only)
 install iso_target:
     nix run github:nix-community/nixos-anywhere -- --build-on-remote --flake .#{{host}} {{iso_target}}
 

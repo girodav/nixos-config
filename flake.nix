@@ -1,5 +1,5 @@
 {
-  description = "NixOS configuration for edoras";
+  description = "NixOS configurations";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
@@ -14,7 +14,14 @@
       edoras = nixpkgs.lib.nixosSystem {
         modules = [
           disko.nixosModules.disko
-          ./nixos/configuration.nix
+          ./nixos/hosts/edoras/configuration.nix
+        ];
+      };
+
+      rivendell = nixpkgs.lib.nixosSystem {
+        modules = [
+          disko.nixosModules.disko
+          ./nixos/hosts/rivendell/configuration.nix
         ];
       };
     };
