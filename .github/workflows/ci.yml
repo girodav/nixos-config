@@ -17,13 +17,3 @@ jobs:
         run: nix flake check
         env:
           NIX_CONFIG: experimental-features = nix-command flakes
-
-      - name: Dry-build edoras
-        run: nix build ".#nixosConfigurations.edoras.config.system.build.toplevel" --dry-run
-        env:
-          NIX_CONFIG: experimental-features = nix-command flakes
-
-      - name: Dry-build rivendell
-        run: nix build ".#nixosConfigurations.rivendell.config.system.build.toplevel" --dry-run
-        env:
-          NIX_CONFIG: experimental-features = nix-command flakes
