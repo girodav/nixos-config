@@ -1,29 +1,33 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
   ],
-  "nix": {
-    "enabled": true
+  nix: {
+    enabled: true,
   },
-  "lockFileMaintenance": {
-    "enabled": true,
-    "automerge": true,
-    "platformAutomerge": true,
-    "commitMessageAction": "nix flake update",
-    "commitMessageTopic": null,
-    "commitMessageExtra": null
+  lockFileMaintenance: {
+    enabled: true,
+    automerge: true,
+    platformAutomerge: true,
+    commitMessageAction: 'nix flake update',
+    commitMessageTopic: null,
+    commitMessageExtra: null,
   },
-  "customManagers": [
+  customManagers: [
     {
-      "customType": "regex",
-      "fileMatch": ["\\.nix$"],
-      "matchStrings": [
-        "image = \"(?<depName>[^:\"]+):(?<currentValue>[^@\"]+)@(?<currentDigest>sha256:[a-f0-9]+)\""
+      customType: 'regex',
+      managerFilePatterns: [
+        '/\\.nix$/',
       ],
-      "datasourceTemplate": "docker"
-    }
+      matchStrings: [
+        'image = "(?<depName>[^:"]+):(?<currentValue>[^@"]+)@(?<currentDigest>sha256:[a-f0-9]+)"',
+      ],
+      datasourceTemplate: 'docker',
+    },
   ],
-  "semanticCommitScope": "",
-  "schedule": ["at any time"]
+  semanticCommitScope: '',
+  schedule: [
+    'at any time',
+  ],
 }
