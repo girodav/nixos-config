@@ -10,7 +10,7 @@
   services.beszel.agent = {
     enable = true;
     openFirewall = true;
-    environment.KEY = ""; # TODO: set after first hub start
+    environment.KEY = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuvPVzr3DoEiUqGliooaZntx/yvkiLxKfK/jNhegN9O";
   };
 
   # Guard against empty KEY so activation doesn't fail before the hub is set up.
