@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 let
   appdata = "/mnt/fast/apps";
@@ -6,8 +6,26 @@ let
   data = "/mnt/tank/data";
   tz = "Europe/Dublin";
   user = "1000:1000";
+  network = "media";
 in
 {
+  # Create the shared network before any container starts
+  systemd.services."docker-create-${network}" = {
+    description = "Create ${network} Docker network";
+    after    = [ "docker.service" ];
+    requires = [ "docker.service" ];
+    before   = map (n: "docker-${n}.service") [
+      "jellyfin" "seerr" "profilarr"
+      "prowlarr" "radarr" "sonarr" "qui" "qbittorrent"
+    ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.bash}/bin/sh -c '${pkgs.docker}/bin/docker network inspect ${network} || ${pkgs.docker}/bin/docker network create ${network}'";
+    };
+  };
+
   virtualisation.docker.enable = true;
 
   virtualisation.oci-containers = {
@@ -42,6 +60,7 @@ in
           JELLYFIN_CACHE_DIR = "/config/cache";
         };
         extraOptions = [
+          "--network=${network}"
           "--device=/dev/dri:/dev/dri"
           "--group-add=44"   # video
           "--group-add=107"  # render
@@ -54,6 +73,7 @@ in
         ports = [ "5055:5055" ];
         volumes = [ "${appdata}/seerr:/app/config" ];
         environment.TZ = tz;
+        extraOptions = [ "--network=${network}" ];
       };
 
       profilarr = {
@@ -62,6 +82,7 @@ in
         ports = [ "6868:6868" ];
         volumes = [ "${appdata}/profilarr:/config" ];
         environment.TZ = tz;
+        extraOptions = [ "--network=${network}" ];
       };
 
       prowlarr = {
@@ -70,6 +91,7 @@ in
         ports = [ "9696:9696" ];
         volumes = [ "${appdata}/prowlarr:/config" ];
         environment.TZ = tz;
+        extraOptions = [ "--network=${network}" ];
       };
 
       radarr = {
@@ -82,6 +104,7 @@ in
           "${downloads}:/data/downloads"
         ];
         environment.TZ = tz;
+        extraOptions = [ "--network=${network}" ];
       };
 
       sonarr = {
@@ -94,6 +117,7 @@ in
           "${downloads}:/data/downloads"
         ];
         environment.TZ = tz;
+        extraOptions = [ "--network=${network}" ];
       };
 
       qui = {
@@ -105,6 +129,7 @@ in
           "${downloads}:/data/downloads"
         ];
         environment.TZ = tz;
+        extraOptions = [ "--network=${network}" ];
       };
 
       qbittorrent = {
@@ -128,6 +153,7 @@ in
           PRIVOXY_ENABLED = "false";
         };
         extraOptions = [
+          "--network=${network}"
           "--cap-add=NET_ADMIN"
           "--sysctl=net.ipv4.conf.all.src_valid_mark=1"
           "--sysctl=net.ipv6.conf.all.disable_ipv6=1"
