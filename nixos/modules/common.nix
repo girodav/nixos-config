@@ -1,15 +1,6 @@
-# NixOS system configuration entry point.
-
 { pkgs, ... }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-    ./disko.nix
-    ./modules/networking.nix
-    ./modules/incus.nix
-  ];
-
   # Boot -------------------------------------------------------------------
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -23,19 +14,16 @@
     enable = true;
     settings = {
       PermitRootLogin        = "no";
-      PasswordAuthentication = true;
+      PasswordAuthentication = false;
     };
   };
 
   # Nix --------------------------------------------------------------------
-  nix = {
-    settings = {
-      experimental-features = "nix-command flakes";
-      flake-registry         = "";
-    };
+  nix.settings = {
+    experimental-features = "nix-command flakes";
+    flake-registry         = "";
   };
 
-  # Auto-upgrade — uses flake.lock from GitHub (updated daily by CI)
   system.autoUpgrade = {
     enable = true;
     allowReboot = true;
@@ -55,9 +43,6 @@
 
   users.users."girodav" = {
     isNormalUser = true;
-    description  = "girodav";
-    extraGroups  = [ "wheel" "incus-admin" ];
-    initialPassword = "changeme";
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEFUXy3ekhkpYc5Uum2Q46GdQcMz/NryC0UZ3u6YirZA girodav@Davides-MBP-2.fritz.box"
     ];
@@ -66,28 +51,16 @@
   # Packages ---------------------------------------------------------------
   environment.systemPackages = with pkgs; [
     vim
-    lsof
     curl
     htop
     btop
-    wget
     git
-    gnumake
+    lsof
+    wget
   ];
 
-  # Required for VS Code Server remote extension
   programs.nix-ld.enable = true;
-
-  programs.git = {
-    enable = true;
-    config.user = {
-      name  = "Davide Girardi";
-      email = "1390902+girodav@users.noreply.github.com";
-    };
-    config.init.defaultBranch = "main";
-  };
 
   powerManagement.powertop.enable = true;
   powerManagement.cpuFreqGovernor = "powersave";
-  system.stateVersion = "26.05";
 }
