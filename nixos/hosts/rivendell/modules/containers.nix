@@ -40,7 +40,7 @@ in
       };
 
       ntfy = {
-        image = "binwiederhier/ntfy:v2.11.0@sha256:38ef0bd584de2a11414c9b7330c03e5a542a312fd5078e09fc4a99e4cdd43352";
+        image = "binwiederhier/ntfy:v2.27.0@sha256:47a51000dcd69b4ccd15d7f7b10ea410b9a065688bf64ab5f4861817a85b4813";
         cmd = [ "serve" ];
         ports = [ "2586:80" ];
         volumes = [ "${appdata}/ntfy/cache:/var/cache/ntfy" ];
