@@ -146,7 +146,7 @@ in
       };
 
       qbittorrent = {
-        image = "ghcr.io/hotio/qbittorrent:release@sha256:fbff489ebe410ad4be3e86294298f40ccefb2cb410ccf2847f7c5819171dfb56";
+        image = "ghcr.io/hotio/qbittorrent:release@sha256:9c723fb0c1f5791b0ef8e394770a2e2f6893b0957d7ede5d168166542a8a2aca";
         ports = [ "8080:8080" ];
         volumes = [
           "${appdata}/qbittorrent:/config"
