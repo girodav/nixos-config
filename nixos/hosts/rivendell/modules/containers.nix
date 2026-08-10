@@ -34,7 +34,7 @@ in
     containers = {
 
       dozzle = {
-        image = "ghcr.io/amir20/dozzle:latest@sha256:5bb13e26b62f9bc4bd390e3e0c9423263b7df86e3a4167b718cc6e352f96b54f";
+        image = "ghcr.io/amir20/dozzle:latest@sha256:a8441e9d2928cc7b30d0023f5eedbb87ef6e234d87f3be02662bd8f417955b8b";
         ports = [ "8888:8080" ];
         volumes = [ "/var/run/docker.sock:/var/run/docker.sock:ro" ];
       };
