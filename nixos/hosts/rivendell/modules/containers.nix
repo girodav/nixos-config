@@ -110,6 +110,7 @@ in
         volumes = [
           "${appdata}/qui:/config"
           "${downloads}:/data/downloads"
+          "${data}/torrents:/data/torrents"
         ];
         environments.TZ = tz;
         networks = [ "media" ];
