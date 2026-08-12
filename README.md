@@ -61,16 +61,15 @@ nixos/
       modules/
         networking.nix
         zfs.nix                  # ZFS pool imports (fast, tank) + scrub + ZED ntfy alerts
-        containers.nix           # Media stack as oci-containers
-        beszel.nix               # Beszel hub + SMART monitoring
+        containers.nix           # Media stack as Podman Quadlet containers
         incus.nix                # Incus containers + HTTPS API
 ```
 
 ## Monitoring
 
-[Beszel](https://beszel.dev) — hub on rivendell (port 8090), lightweight agent on every host.
+[Beszel](https://beszel.dev) — hub on edoras (port 8090), lightweight agent on every host.
 
-Covers system metrics (CPU, memory, disk, network), Docker container stats, and SMART disk health.
+Covers system metrics (CPU, memory, disk, network), container stats, and SMART disk health.
 
 ### Agent bootstrap
 

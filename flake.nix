@@ -7,9 +7,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
   };
 
-  outputs = { nixpkgs, disko, ... }: {
+  outputs = { nixpkgs, disko, quadlet-nix, ... }: {
     nixosConfigurations = {
       edoras = nixpkgs.lib.nixosSystem {
         modules = [
@@ -21,6 +22,7 @@
       rivendell = nixpkgs.lib.nixosSystem {
         modules = [
           disko.nixosModules.disko
+          quadlet-nix.nixosModules.quadlet
           ./nixos/hosts/rivendell/configuration.nix
         ];
       };
