@@ -4,8 +4,8 @@ NixOS configurations for my home machines.
 
 | Host | Hardware | Role |
 |---|---|---|
-| **edoras** | Intel N100, 8 GB RAM, 128 GB NVMe | Dev machine, Incus containers, k3s |
-| **rivendell** | 500 GB NVMe root, 2× 2 TB NVMe (fast), 2× 20 TB HDD (tank) | Home server, media stack |
+| **edoras** | Intel N100, 8 GB RAM, 128 GB NVMe | Dev machine, k3s |
+| **rivendell** | 500 GB NVMe root, 2× 2 TB NVMe (fast), 2× 20 TB HDD (tank) | Home server, media stack, Incus containers |
 
 ## Quick start
 
@@ -54,7 +54,6 @@ nixos/
       disko.nix                  # 512 MB EFI + 8 GB swap + ext4 root
       modules/
         networking.nix
-        incus.nix                # Incus containers + HTTPS API
         k3s.nix                  # Single-node k3s cluster
     rivendell/
       configuration.nix
@@ -65,6 +64,7 @@ nixos/
         zfs.nix                  # ZFS pool imports (fast, tank) + scrub + ZED ntfy alerts
         containers.nix           # Media stack as oci-containers
         beszel.nix               # Beszel hub + SMART monitoring
+        incus.nix                # Incus containers + HTTPS API
 ```
 
 ## Monitoring
