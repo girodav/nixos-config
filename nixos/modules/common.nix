@@ -77,8 +77,6 @@
     wget
   ];
 
-  programs.nix-ld.enable = true;
-
   powerManagement.powertop.enable = true;
   powerManagement.cpuFreqGovernor = "powersave";
 }
