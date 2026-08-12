@@ -6,11 +6,10 @@
     ./hardware-configuration.nix
     ./disko.nix
     ./modules/networking.nix
-    ./modules/incus.nix
     ./modules/k3s.nix
   ];
 
-  users.users."girodav".extraGroups = [ "wheel" "incus-admin" ];
+  users.users."girodav".extraGroups = [ "wheel" ];
 
   environment.systemPackages = with pkgs; [ gnumake ];
 

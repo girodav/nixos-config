@@ -9,13 +9,14 @@
     ./modules/zfs.nix
     ./modules/containers.nix
     ./modules/beszel.nix
+    ./modules/incus.nix
   ];
 
   # Required for ZFS — must be unique per machine
   networking.hostId = "9c70c878";
 
   users.users."girodav" = {
-    extraGroups    = [ "wheel" "docker" ];
+    extraGroups    = [ "wheel" "docker" "incus-admin" ];
     initialPassword = "changeme";
   };
 
