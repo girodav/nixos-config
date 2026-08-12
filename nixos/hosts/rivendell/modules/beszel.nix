@@ -20,5 +20,8 @@
     ];
   };
 
+  systemd.services.beszel-agent.environment.DOCKER_HOST = "unix:///run/podman/podman.sock";
+  systemd.services.beszel-agent.serviceConfig.SupplementaryGroups = [ "podman" ];
+
   networking.firewall.allowedTCPPorts = [ 8090 ];
 }

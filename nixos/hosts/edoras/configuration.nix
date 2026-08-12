@@ -12,6 +12,11 @@
 
   environment.systemPackages = with pkgs; [ gnumake ];
 
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "server";
+  };
+
   programs.git = {
     enable = true;
     config.user = {
