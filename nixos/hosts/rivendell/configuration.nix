@@ -16,7 +16,7 @@
   networking.hostId = "9c70c878";
 
   users.users."girodav" = {
-    extraGroups    = [ "wheel" "docker" "incus-admin" ];
+    extraGroups    = [ "wheel" "incus-admin" ];
     initialPassword = "changeme";
   };
 
