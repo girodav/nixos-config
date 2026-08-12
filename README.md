@@ -4,7 +4,7 @@ NixOS configurations for my home machines.
 
 | Host | Hardware | Role |
 |---|---|---|
-| **edoras** | Intel N100, 8 GB RAM, 128 GB NVMe | Dev machine, k3s |
+| **edoras** | Intel N100, 8 GB RAM, 128 GB NVMe | Dev machine |
 | **rivendell** | 500 GB NVMe root, 2× 2 TB NVMe (fast), 2× 20 TB HDD (tank) | Home server, media stack, Incus containers |
 
 ## Quick start
@@ -54,7 +54,6 @@ nixos/
       disko.nix                  # 512 MB EFI + 8 GB swap + ext4 root
       modules/
         networking.nix
-        k3s.nix                  # Single-node k3s cluster
     rivendell/
       configuration.nix
       hardware-configuration.nix

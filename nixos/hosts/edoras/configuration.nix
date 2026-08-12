@@ -6,7 +6,6 @@
     ./hardware-configuration.nix
     ./disko.nix
     ./modules/networking.nix
-    ./modules/k3s.nix
   ];
 
   users.users."girodav".extraGroups = [ "wheel" ];
