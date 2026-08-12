@@ -109,8 +109,8 @@ in
         publishPorts = [ "7476:7476" ];
         volumes = [
           "${appdata}/qui:/config"
+          "${data}:/data"
           "${downloads}:/data/downloads"
-          "${data}/torrents:/data/torrents"
         ];
         environments.TZ = tz;
         networks = [ "media" ];
