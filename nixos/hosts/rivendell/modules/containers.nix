@@ -109,6 +109,7 @@ in
         publishPorts = [ "7476:7476" ];
         volumes = [
           "${appdata}/qui:/config"
+          "${data}:/data"
           "${downloads}:/data/downloads"
         ];
         environments.TZ = tz;
