@@ -5,10 +5,17 @@
     ../../modules/common.nix
     ./hardware-configuration.nix
     ./disko.nix
-    ./modules/networking.nix
   ];
 
+  networking.hostName = "edoras";
+
   users.users."girodav".extraGroups = [ "wheel" ];
+
+  services.beszel.agent = {
+    enable = true;
+    openFirewall = true;
+    environment.KEY = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuvPVzr3DoEiUqGliooaZntx/yvkiLxKfK/jNhegN9O";
+  };
 
   environment.systemPackages = with pkgs; [ gnumake ];
 
@@ -25,6 +32,9 @@
     };
     config.init.defaultBranch = "main";
   };
+
+  powerManagement.powertop.enable = true;
+  powerManagement.cpuFreqGovernor = "powersave";
 
   system.stateVersion = "26.05";
 }

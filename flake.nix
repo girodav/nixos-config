@@ -26,6 +26,13 @@
           ./nixos/hosts/rivendell/configuration.nix
         ];
       };
+
+      gondor = nixpkgs.lib.nixosSystem {
+        modules = [
+          disko.nixosModules.disko
+          ./nixos/hosts/gondor/configuration.nix
+        ];
+      };
     };
   };
 }

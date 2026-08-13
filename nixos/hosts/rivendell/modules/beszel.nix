@@ -1,14 +1,17 @@
 { ... }:
 
 {
-  # Beszel hub — web dashboard on port 8090
   services.beszel.hub = {
     enable = true;
     host = "0.0.0.0";
-    port = 8090;
   };
 
-  # Override agent to add SMART disk monitoring for all drives
+  services.beszel.agent = {
+    enable = true;
+    openFirewall = true;
+    environment.KEY = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuvPVzr3DoEiUqGliooaZntx/yvkiLxKfK/jNhegN9O";
+  };
+
   services.beszel.agent.smartmon = {
     enable = true;
     deviceAllow = [

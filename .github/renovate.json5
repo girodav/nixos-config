@@ -12,8 +12,6 @@
     platformAutomerge: true,
     schedule: ['at any time'],
     commitMessageAction: 'nix flake update',
-    commitMessageTopic: null,
-    commitMessageExtra: null,
   },
   packageRules: [
     {

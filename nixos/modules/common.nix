@@ -1,13 +1,6 @@
 { pkgs, ... }:
 
 {
-  # Beszel lightweight monitoring agent.
-  services.beszel.agent = {
-    enable = true;
-    openFirewall = true;
-    environment.KEY = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuvPVzr3DoEiUqGliooaZntx/yvkiLxKfK/jNhegN9O";
-  };
-
   # Boot -------------------------------------------------------------------
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -77,6 +70,4 @@
     wget
   ];
 
-  powerManagement.powertop.enable = true;
-  powerManagement.cpuFreqGovernor = "powersave";
 }
