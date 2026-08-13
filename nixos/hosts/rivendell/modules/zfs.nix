@@ -20,4 +20,33 @@ in
     ZED_NTFY_TOPIC           = ntfyTopic;
     ZED_NTFY_URL             = ntfyUrl;
   };
+
+  services.sanoid = {
+    enable = true;
+    datasets = {
+      "fast/apps" = {
+        hourly  = 24;
+        daily   = 7;
+        weekly  = 4;
+        monthly = 0;
+        autosnap  = true;
+        autoprune = true;
+      };
+      "tank/data" = {
+        hourly  = 0;
+        daily   = 7;
+        weekly  = 4;
+        monthly = 0;
+        autosnap  = true;
+        autoprune = true;
+      };
+    };
+  };
+
+  services.syncoid = {
+    enable = true;
+    commands."fast/apps" = {
+      target = "tank/apps";
+    };
+  };
 }
