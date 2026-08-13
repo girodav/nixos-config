@@ -10,6 +10,7 @@
     enabled: true,
     automerge: true,
     platformAutomerge: true,
+    schedule: ['at any time'],
     commitMessageAction: 'nix flake update',
     commitMessageTopic: null,
     commitMessageExtra: null,
