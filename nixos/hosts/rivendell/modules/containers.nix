@@ -119,7 +119,7 @@ in
 
     containers.qbittorrent = svc // {
       containerConfig = {
-        image = "ghcr.io/hotio/qbittorrent:release@sha256:06388a2b7a2cb4450ffa94cc7a8714715f676340d1181673386b01aed0210944";
+        image = "ghcr.io/hotio/qbittorrent:release@sha256:b7a9d5237da429627dde921e58c0c1058262c960681e85c84435de3e9bc52691";
         publishPorts = [ "8080:8080" ];
         volumes = [
           "${appdata}/qbittorrent:/config"
