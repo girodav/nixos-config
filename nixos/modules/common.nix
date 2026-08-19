@@ -24,8 +24,13 @@
   services.openssh = {
     enable = true;
     settings = {
-      PermitRootLogin        = "no";
-      PasswordAuthentication = false;
+      PermitRootLogin          = "no";
+      PasswordAuthentication   = false;
+      KbdInteractiveAuthentication = false;
+      X11Forwarding            = false;
+      AllowUsers               = [ "girodav" ];
+      MaxAuthTries             = 3;
+      LoginGraceTime           = 20;
     };
   };
 
