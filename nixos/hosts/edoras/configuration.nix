@@ -9,6 +9,10 @@
 
   networking.hostName = "edoras";
 
+  # Prevents igc (Intel I225/I226) from losing link after switch reboots; ASPM
+  # power-gating can leave the NIC unable to recover without a host reboot.
+  boot.kernelParams = [ "pcie_aspm.policy=performance" ];
+
   users.users."girodav".extraGroups = [ "wheel" ];
 
   services.beszel.agent = {

@@ -13,6 +13,10 @@
 
   networking.hostName = "rivendell";
 
+  # Prevents r8169 (Realtek) from losing link after switch reboots; ASPM
+  # power-gating can leave the NIC unable to recover without a host reboot.
+  boot.kernelParams = [ "pcie_aspm.policy=performance" ];
+
   # Required for ZFS — must be unique per machine
   networking.hostId = "9c70c878";
 
