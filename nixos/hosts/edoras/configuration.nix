@@ -15,12 +15,6 @@
 
   users.users."girodav".extraGroups = [ "wheel" ];
 
-  services.beszel.agent = {
-    enable = true;
-    openFirewall = true;
-    environment.KEY = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuvPVzr3DoEiUqGliooaZntx/yvkiLxKfK/jNhegN9O";
-  };
-
   environment.systemPackages = with pkgs; [ gnumake ];
 
   services.tailscale = {

@@ -63,7 +63,6 @@
   environment.systemPackages = with pkgs; [
     vim
     curl
-    htop
     btop
     git
     lsof
