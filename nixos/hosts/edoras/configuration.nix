@@ -75,6 +75,13 @@
     };
   };
 
+  services.adguardhome = {
+    enable = true;
+    openFirewall = true;
+  };
+  networking.firewall.allowedTCPPorts = [ 53 ];
+  networking.firewall.allowedUDPPorts = [ 53 ];
+
   powerManagement.powertop.enable = true;
   powerManagement.cpuFreqGovernor = "powersave";
 
