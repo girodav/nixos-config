@@ -5,7 +5,6 @@ NixOS configurations for my home machines and VPS.
 | Host | Where | Purpose |
 |---|---|---|
 | **edoras** | local | dev/test machine |
-| **gondor** | VPS | general purpose |
 
 ## Quick start
 
@@ -38,14 +37,9 @@ nixos/
       configuration.nix
       hardware-configuration.nix
       disko.nix                  # 512 MB EFI + 8 GB swap + ext4 root
-    gondor/
-      configuration.nix
-      hardware-configuration.nix
-      disko.nix                  # 1 MB BIOS boot + 1 GB swap + ext4 root
 ```
 
 ## Automation
 
 - **Auto-upgrade** — each host upgrades itself nightly at 04:00 from `github:girodav/nixos-config`
 - **Flake updates** — Renovate opens PRs to update `flake.lock`
-- **Container image updates** — Renovate tracks image digests in `.nix` files and opens PRs when new versions are available

@@ -10,23 +10,4 @@
     schedule: ['at any time'],
     commitMessageAction: 'nix flake update',
   },
-  packageRules: [
-    {
-      matchManagers: ['custom.regex'],
-      automerge: true,
-      platformAutomerge: true,
-    },
-  ],
-  customManagers: [
-    {
-      customType: 'regex',
-      managerFilePatterns: [
-        '/\\.nix$/',
-      ],
-      matchStrings: [
-        'image = "(?<depName>[^:"]+):(?<currentValue>[^@"]+)@(?<currentDigest>sha256:[a-f0-9]+)"',
-      ],
-      datasourceTemplate: 'docker',
-    },
-  ],
 }
