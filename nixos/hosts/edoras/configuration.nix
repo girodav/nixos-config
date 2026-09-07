@@ -31,9 +31,16 @@
     config.init.defaultBranch = "main";
   };
 
-  services.k3s.enable = true;
+  networking.firewall.trustedInterfaces = [ "incusbr0" ];
 
-  networking.firewall.allowedTCPPorts = [ 6443 ];
+  # NAT for incus containers on the default profile (incusbr0 → br0).
+  # Managed by NixOS so it survives reboots; incus's own nftables rules get
+  # flushed when NixOS reloads its ruleset.
+  networking.nat = {
+    enable = true;
+    internalInterfaces = [ "incusbr0" ];
+    externalInterface = "br0";
+  };
 
   # Bridge enp1s0 so incus containers on the "lan" profile get real LAN IPs.
   # "05-" beats common.nix "10-lan" (en* → DHCP), so enp1s0 becomes a bridge
@@ -47,7 +54,7 @@
     preseed = {
       storage_pools = [{ name = "default"; driver = "dir"; }];
       networks = [
-        { name = "incusbr0"; type = "bridge"; config = { "ipv4.address" = "10.0.0.1/24"; "ipv4.nat" = "true"; "ipv4.dhcp" = "true"; }; }
+        { name = "incusbr0"; type = "bridge"; config = { "ipv4.address" = "auto"; "ipv4.nat" = "true"; }; }
       ];
       profiles = [
         {

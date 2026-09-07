@@ -69,7 +69,6 @@
     vim
     curl
     btop
-    git
     lsof
     wget
   ];
