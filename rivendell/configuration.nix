@@ -20,6 +20,46 @@
   boot.zfs.forceImportRoot = false;
   services.zfs.autoScrub.enable = true;
 
+  # Snapshots: declared here, no per-dataset ZFS properties needed.
+  services.sanoid = {
+    enable = true;
+    templates.default = {
+      hourly = 24;
+      daily = 7;
+      weekly = 4;
+      monthly = 12;
+      autosnap = true;
+      autoprune = true;
+    };
+    templates.ignore = { autosnap = false; autoprune = false; };
+    datasets = {
+      "fast" = { useTemplate = [ "default" ]; recursive = true; };
+      "fast/incus" = { useTemplate = [ "ignore" ]; recursive = true; }; # Incus manages its own snapshots
+      "tank/data" = { useTemplate = [ "default" ]; recursive = true; };
+    };
+  };
+
+  # Weekly pull of main from GitHub (lock is bumped by PRs); no auto reboot.
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:girodav/nixos-config#rivendell";
+    upgrade = false; # flake: honour the repo's flake.lock, no --upgrade
+    dates = "Sun 04:00";
+    randomizedDelaySec = "30min";
+    allowReboot = false;
+  };
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+  nix.optimise.automatic = true;
+  boot.loader.systemd-boot.configurationLimit = 10; # keep the 1G ESP from filling up
+
+  # No mail transport yet: failures land in `journalctl -u smartd`.
+  services.smartd.enable = true;
+  environment.systemPackages = [ pkgs.smartmontools ]; # smartctl, used by `just status`
+
   virtualisation.docker.enable = true;
   programs.git.enable = true;
 
