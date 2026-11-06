@@ -19,6 +19,18 @@ dry:
 test:
     nix run nixpkgs#nixos-rebuild -- test --flake .#{{host}} {{remote_flags}}
 
-# Quick health check: pools, failed units, last auto-upgrade, drive SMART status
+# Quick health check: pools, failed units, auto-upgrade, pending reboot, drive SMART status
 status:
-    ssh {{target}} 'zpool status -x; echo; systemctl --failed --no-legend; echo; systemctl status nixos-upgrade --no-pager -n 5 | head -12; echo; for d in /dev/nvme?n1 /dev/sd?; do [ -e $d ] && sudo smartctl -H $d | grep -E "overall|result" | sed "s|^|$d: |"; done'
+    #!/usr/bin/env bash
+    ssh {{target}} bash -s <<'EOF'
+    echo "== pools"; zpool status -x
+    echo "== failed units"; systemctl --failed --no-legend
+    echo "== auto-upgrade"
+    systemctl show nixos-upgrade -p Result
+    systemctl list-timers nixos-upgrade --no-legend
+    journalctl -u nixos-upgrade -n 6 --no-pager -o short-iso | grep -v Consumed
+    echo "== generation"; readlink /run/current-system
+    [ "$(readlink /run/booted-system/kernel)" = "$(readlink /run/current-system/kernel)" ] || echo "reboot needed: kernel changed since boot"
+    echo "== smart"
+    for d in $(sudo smartctl --scan | cut -d' ' -f1); do sudo smartctl -H $d | grep -E "overall|result" | sed "s|^|$d: |"; done
+    EOF
