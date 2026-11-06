@@ -2,10 +2,6 @@
 
 NixOS config for `rivendell`, my all-in-one NAS, container and experiment home server.
 
-- **Storage:** ZFS pools `fast` (NVMe mirror) and `tank`, auto-imported at boot; snapshots via sanoid.
-- **Workloads:** Docker, and Incus (storage on `fast/incus`, web UI on `:8443`, LAN instances via the `lan` profile on `br0`).
-- **Updates:** weekly `system.autoUpgrade` from this repo's `main` (no automatic reboot). A weekly PR bumps `flake.lock`, and CI builds the system before merge.
-
 ## Install (kexec via nixos-anywhere)
 
 1. Check the boot disk in `rivendell/disko.nix`. **This wipes that disk only.**
@@ -20,11 +16,6 @@ NixOS config for `rivendell`, my all-in-one NAS, container and experiment home s
 
 ## Day to day
 
-| Command       | What it does                                                   |
-| ------------- | -------------------------------------------------------------- |
-| `just dry`    | Dry build, to catch errors                                     |
-| `just test`   | Activate on the host without making it the boot default        |
-| `just switch` | Build and activate on the host                                 |
-| `just status` | Pool health, failed units, last auto-upgrade, drive SMART data |
+Run `just` to list the commands (`dry`, `test`, `switch`, `status`).
 
 Roll back from the boot menu, with `sudo nixos-rebuild switch --rollback`, or by reverting the commit on `main`.

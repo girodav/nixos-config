@@ -5,7 +5,6 @@
   networking.hostId = "8f3a2b1c"; # required by ZFS; unique per machine
   time.timeZone = "Europe/Dublin";
 
-  # Generic initrd modules; add more here if the box has an exotic boot controller.
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" ];
   hardware.enableRedistributableFirmware = true;
   nixpkgs.hostPlatform = "x86_64-linux";
@@ -31,10 +30,9 @@
       autosnap = true;
       autoprune = true;
     };
-    templates.ignore = { autosnap = false; autoprune = false; };
     datasets = {
       "fast" = { useTemplate = [ "default" ]; recursive = true; };
-      "fast/incus" = { useTemplate = [ "ignore" ]; recursive = true; }; # Incus manages its own snapshots
+      "fast/incus" = { autosnap = false; autoprune = false; recursive = true; }; # Incus manages its own snapshots
       "tank/data" = { useTemplate = [ "default" ]; recursive = true; };
     };
   };
@@ -46,7 +44,6 @@
     upgrade = false; # flake: honour the repo's flake.lock, no --upgrade
     dates = "Sun 04:00";
     randomizedDelaySec = "30min";
-    allowReboot = false;
   };
   nix.gc = {
     automatic = true;
