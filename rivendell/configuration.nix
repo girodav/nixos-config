@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  imports = [ ./storage.nix ./networking.nix ./incus.nix ./maintenance.nix ];
+
   networking.hostName = "rivendell";
   networking.hostId = "8f3a2b1c"; # required by ZFS; unique per machine
   time.timeZone = "Europe/Dublin";
@@ -12,107 +14,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # ZFS: data pools auto-import at boot. First time on a fresh install, run
-  # `zpool import -f <pool>` once so the hostid matches.
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.extraPools = [ "fast" "tank" ];
-  boot.zfs.forceImportRoot = false;
-  services.zfs.autoScrub.enable = true;
-
-  # Snapshots: declared here, no per-dataset ZFS properties needed.
-  services.sanoid = {
-    enable = true;
-    templates.default = {
-      hourly = 24;
-      daily = 7;
-      weekly = 4;
-      monthly = 12;
-      autosnap = true;
-      autoprune = true;
-    };
-    datasets = {
-      "fast" = { useTemplate = [ "default" ]; recursive = true; };
-      "fast/incus" = { autosnap = false; autoprune = false; recursive = true; }; # Incus manages its own snapshots
-      "tank/data" = { useTemplate = [ "default" ]; recursive = true; };
-    };
-  };
-
-  # Weekly pull of main from GitHub (lock is bumped by PRs); no auto reboot.
-  system.autoUpgrade = {
-    enable = true;
-    flake = "github:girodav/nixos-config#rivendell";
-    upgrade = false; # flake: honour the repo's flake.lock, no --upgrade
-    dates = "Sun 04:00";
-    randomizedDelaySec = "30min";
-  };
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-  nix.optimise.automatic = true;
-  boot.loader.systemd-boot.configurationLimit = 10; # keep the 1G ESP from filling up
-
-  # No mail transport yet: failures land in `journalctl -u smartd`.
-  services.smartd.enable = true;
-  environment.systemPackages = [
-    pkgs.smartmontools # smartctl, used by `just status`
-    pkgs.newt # whiptail, only here to support the community (Proxmox helper) scripts
-  ];
-
-  # Incus on ZFS dataset fast/incus (create it first: `zfs create fast/incus`).
-  virtualisation.incus = {
-    enable = true;
-    ui.enable = true; # https://rivendell:8443
-    preseed = {
-      config."core.https_address" = ":8443";
-      networks = [{
-        name = "incusbr0";
-        type = "bridge";
-        config = { "ipv4.address" = "auto"; "ipv6.address" = "none"; };
-      }];
-      storage_pools = [{
-        name = "default";
-        driver = "zfs";
-        config.source = "fast/incus";
-      }];
-      profiles = [{
-        name = "default";
-        devices = {
-          eth0 = { name = "eth0"; network = "incusbr0"; type = "nic"; };
-          root = { path = "/"; pool = "default"; type = "disk"; };
-        };
-      }
-      {
-        # LAN DHCP via host bridge br0 (instances get addresses from the router).
-        name = "lan";
-        devices.eth0 = { name = "eth0"; nictype = "bridged"; parent = "br0"; type = "nic"; };
-      }];
-    };
-  };
-  # systemd-networkd: only touches interfaces matched below (ignores incus veths).
-  # br0 takes over enp3s0's MAC so the router keeps handing out the same DHCP lease.
-  networking.useNetworkd = true;
-  networking.useDHCP = false;
-  systemd.network = {
-    netdevs."10-br0".netdevConfig = {
-      Kind = "bridge";
-      Name = "br0";
-      MACAddress = "9c:6b:00:6c:42:ed";
-    };
-    networks."10-enp3s0" = {
-      matchConfig.Name = "enp3s0";
-      networkConfig.Bridge = "br0";
-    };
-    networks."10-br0" = {
-      matchConfig.Name = "br0";
-      networkConfig.DHCP = "ipv4";
-      dhcpV4Config.ClientIdentifier = "mac"; # same client id as a plain NIC
-    };
-  };
-  networking.nftables.enable = true; # required by incus
-  networking.firewall.trustedInterfaces = [ "incusbr0" ];
-  networking.firewall.allowedTCPPorts = [ 8443 ];
+  environment.systemPackages = [ pkgs.newt ]; # whiptail, only here to support the community (Proxmox helper) scripts
 
   services.openssh = {
     enable = true;
@@ -126,7 +28,7 @@
   security.sudo.wheelNeedsPassword = false;
   users.users.girodav = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "incus-admin" ];
+    extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEFUXy3ekhkpYc5Uum2Q46GdQcMz/NryC0UZ3u6YirZA girodav@Davides-MBP-2.fritz.box"
     ];
