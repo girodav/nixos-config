@@ -57,9 +57,6 @@
   services.smartd.enable = true;
   environment.systemPackages = [ pkgs.smartmontools ]; # smartctl, used by `just status`
 
-  virtualisation.docker.enable = true;
-  programs.git.enable = true;
-
   # Incus on ZFS dataset fast/incus (create it first: `zfs create fast/incus`).
   virtualisation.incus = {
     enable = true;
@@ -90,7 +87,7 @@
       }];
     };
   };
-  # systemd-networkd: only touches interfaces matched below (ignores docker/incus veths).
+  # systemd-networkd: only touches interfaces matched below (ignores incus veths).
   # br0 takes over enp3s0's MAC so the router keeps handing out the same DHCP lease.
   networking.useNetworkd = true;
   networking.useDHCP = false;
@@ -126,7 +123,7 @@
   security.sudo.wheelNeedsPassword = false;
   users.users.girodav = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "incus-admin" ];
+    extraGroups = [ "wheel" "incus-admin" ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEFUXy3ekhkpYc5Uum2Q46GdQcMz/NryC0UZ3u6YirZA girodav@Davides-MBP-2.fritz.box"
     ];

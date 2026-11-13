@@ -16,6 +16,6 @@ NixOS config for `rivendell`, my all-in-one NAS, container and experiment home s
 
 ## Day to day
 
-Run `just` to list the commands (`dry`, `test`, `switch`, `status`).
+Run `just` to list the commands (`deploy`, `dry`, `status`).
 
 Roll back from the boot menu, with `sudo nixos-rebuild switch --rollback`, or by reverting the commit on `main`.
