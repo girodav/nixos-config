@@ -7,17 +7,13 @@ remote_flags := "--target-host " + target + " --build-host " + target + " --elev
 install ip:
     nix run github:nix-community/nixos-anywhere -- --build-on-remote --flake .#{{host}} {{ip}}
 
-# Build and activate on the remote host
-switch:
-    nix run nixpkgs#nixos-rebuild -- switch --flake .#{{host}} {{remote_flags}}
+# Build and activate on the remote host: `just deploy` (switch) or `just deploy test` (reboot rolls back)
+deploy op="switch":
+    nix run nixpkgs#nixos-rebuild -- {{op}} --flake .#{{host}} {{remote_flags}}
 
 # Dry build (check for errors)
 dry:
     nix run nixpkgs#nixos-rebuild -- dry-build --flake .#{{host}}
-
-# Build and activate on the remote host without making it the boot default (reboot rolls back)
-test:
-    nix run nixpkgs#nixos-rebuild -- test --flake .#{{host}} {{remote_flags}}
 
 # Quick health check: pools, failed units, auto-upgrade, pending reboot, drive SMART status
 status:
