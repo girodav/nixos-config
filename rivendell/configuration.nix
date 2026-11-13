@@ -55,7 +55,10 @@
 
   # No mail transport yet: failures land in `journalctl -u smartd`.
   services.smartd.enable = true;
-  environment.systemPackages = [ pkgs.smartmontools ]; # smartctl, used by `just status`
+  environment.systemPackages = [
+    pkgs.smartmontools # smartctl, used by `just status`
+    pkgs.newt # whiptail, only here to support the community (Proxmox helper) scripts
+  ];
 
   # Incus on ZFS dataset fast/incus (create it first: `zfs create fast/incus`).
   virtualisation.incus = {
