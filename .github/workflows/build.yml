@@ -3,10 +3,27 @@ on:
   push:
     branches: [main]
   pull_request:
+permissions:
+  contents: read
+  pull-requests: write # to post the package diff comment
 jobs:
   toplevel:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
-      - run: nix build --no-link .#nixosConfigurations.rivendell.config.system.build.toplevel
+      - run: nix build -o head --print-build-logs .#nixosConfigurations.rivendell.config.system.build.toplevel
+      # On PRs, also build the base and comment which packages changed.
+      - if: github.event_name == 'pull_request'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+      - if: github.event_name == 'pull_request'
+        run: nix build -o base-result ./base#nixosConfigurations.rivendell.config.system.build.toplevel
+      - if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          { echo '### Package changes (nvd)'; echo; echo '```'; nix run nixpkgs#nvd -- diff base-result head | head -c 60000; echo '```'; } > diff.md
+          gh pr comment ${{ github.event.pull_request.number }} --body-file diff.md --edit-last --create-if-none
