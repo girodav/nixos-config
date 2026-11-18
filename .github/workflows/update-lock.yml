@@ -1,7 +1,7 @@
 name: update-flake-lock
 on:
   schedule:
-    - cron: "0 3 * * 6" # Saturday 03:00 UTC
+    - cron: "0 2 * * *" # daily 02:00 UTC, before the host's 04:00 upgrade
   workflow_dispatch:
 permissions:
   contents: write
@@ -13,5 +13,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/update-flake-lock@main
+        id: update
         with:
-          pr-title: "flake.lock: weekly update"
+          pr-title: "flake.lock: daily update"
+      # PRs opened with GITHUB_TOKEN don't trigger other workflows, so build here and merge only if it passes.
+      - if: steps.update.outputs.pull-request-number != ''
+        uses: actions/checkout@v4
+        with:
+          ref: update_flake_lock_action
+      - if: steps.update.outputs.pull-request-number != ''
+        run: nix build --no-link .#nixosConfigurations.rivendell.config.system.build.toplevel
+      - if: steps.update.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr merge ${{ steps.update.outputs.pull-request-number }} --squash --delete-branch
