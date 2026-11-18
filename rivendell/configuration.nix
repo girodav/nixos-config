@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./storage.nix ./networking.nix ./incus.nix ./maintenance.nix ];
+  imports = [ ./storage.nix ./networking.nix ./incus.nix ./maintenance.nix ./alerts.nix ];
 
   networking.hostName = "rivendell";
   networking.hostId = "8f3a2b1c"; # required by ZFS; unique per machine

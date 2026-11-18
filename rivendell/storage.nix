@@ -26,7 +26,7 @@
     };
   };
 
-  # No mail transport yet: failures land in `journalctl -u smartd`.
+  # Alerts go to Discord (see alerts.nix).
   services.smartd.enable = true;
   environment.systemPackages = [ pkgs.smartmontools ]; # smartctl, used by `just status`
 }
