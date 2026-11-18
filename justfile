@@ -25,6 +25,7 @@ status:
     systemctl show nixos-upgrade -p Result
     systemctl list-timers nixos-upgrade --no-legend
     journalctl -u nixos-upgrade -n 6 --no-pager -o short-iso | grep -v Consumed
+    [ -e /var/lib/nixos-upgrade-paused ] && echo "AUTO-UPGRADE PAUSED after a rollback: rm /var/lib/nixos-upgrade-paused to resume"
     echo "== generation"; readlink /run/current-system
     [ "$(readlink /run/booted-system/kernel)" = "$(readlink /run/current-system/kernel)" ] || echo "reboot needed: kernel changed since boot"
     echo "== smart"
