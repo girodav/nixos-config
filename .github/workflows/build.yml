@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
-      - run: nix build -o head --print-build-logs .#nixosConfigurations.rivendell.config.system.build.toplevel
+      - run: nix build --option abort-on-warn true -o head --print-build-logs .#nixosConfigurations.rivendell.config.system.build.toplevel
       # On PRs, also build the base and comment which packages changed.
       - if: github.event_name == 'pull_request'
         uses: actions/checkout@v4
