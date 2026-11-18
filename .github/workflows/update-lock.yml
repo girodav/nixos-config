@@ -14,3 +14,9 @@ jobs:
         with:
           token: ${{ secrets.UPDATE_LOCK_TOKEN }}
           pr-title: "flake.lock: daily update"
+          pr-body: |
+            Automated `flake.lock` update. The `build` check builds the system and comments the package-level diff; merge it yourself once that looks fine.
+
+            ```
+            {{ env.GIT_COMMIT_MESSAGE }}
+            ```
